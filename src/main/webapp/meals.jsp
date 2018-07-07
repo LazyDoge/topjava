@@ -34,7 +34,7 @@
         </tr>
         </thead>
         <c:forEach items="${meals}" var="meal">
-            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
@@ -49,6 +49,35 @@
             </tr>
         </c:forEach>
     </table>
+</section>
+${qww}
+<section>
+
+    <h2>Фильтрация по дате/времени</h2>
+    <hr>
+    <jsp:useBean id="controll" type="ru.javawebinar.topjava.web.meal.MealRestController" scope="request"/>
+    <form method="post" action="meals" >
+        <input type="hidden" name="command" value="filterForm"/>
+        <dl>
+            <dt>StartDate:</dt>
+            <dd><input type="date" value="${controll.startDate}" name="startD"></dd>
+        </dl>
+        <dl>
+            <dt>EndDate:</dt>
+            <dd><input type="date" value="${controll.endDate}" name="endD"></dd>
+        </dl>
+        <dl>
+            <dt>StartTime:</dt>
+            <dd><input type="time" value="${controll.startTime}" name="startT"></dd>
+        </dl>
+        <dl>
+            <dt>EndTime:</dt>
+            <dd><input type="time" value="${controll.endTime}" name="endT"></dd>
+        </dl>
+
+        <button type="submit">Filter</button>
+        <%--<button onclick="window.history.back()" type="button">Cancel</button>--%>
+    </form>
 </section>
 </body>
 </html>
