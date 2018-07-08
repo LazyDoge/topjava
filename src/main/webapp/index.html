@@ -7,8 +7,23 @@
 <h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
 <hr>
 <ul>
-    <li><a href="users">Users</a></li>
-    <li><a href="meals?userId=1">Meals</a></li>
+    <form action="users" method="get">
+        <select  name="id">
+            <option value="1">
+                1
+            </option>
+            <option value="2">
+                2
+            </option>
+        </select>
+        <input type="submit" value="Users">
+    </form>
+
+
+
+
+    <!--<li><a href="users">Users</a></li>-->
+    <li><a href="meals">Meals</a></li>
 
 </ul>
 </body>

@@ -22,27 +22,19 @@ import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 @Controller
 public class MealRestController {
 
-    private boolean timeFilterNeed = false;
-    private boolean dateFilterNeed = false;
-    private LocalTime startTime = LocalTime.MIN;
-    private LocalTime endTime = LocalTime.MAX;
-    private LocalDate startDate = LocalDate.MIN;
-    private LocalDate endDate = LocalDate.MAX;
-
     private static final Logger log = getLogger(MealRestController.class);
 
     @Autowired
     private MealService service;
 
+    public List<MealWithExceed> getAllFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        log.info("getAllFiltered");
+        return MealsUtil.getFilteredWithExceeded(service.getAll(authUserId(), startDate, endDate), authUserCaloriesPerDay(), startTime, endTime);
+    }
+
     public List<MealWithExceed> getAll() {
         log.info("getAll");
-        List<Meal> result = Collections.emptyList();
-        if (dateFilterNeed) {
-            result = service.getAll(authUserId(), startDate, endDate);
-        } else result = service.getAll(authUserId());
-        return timeFilterNeed ? MealsUtil.getFilteredWithExceeded(result,
-                authUserCaloriesPerDay(), startTime, endTime) :
-                MealsUtil.getWithExceeded(result, authUserCaloriesPerDay());
+        return MealsUtil.getWithExceeded(service.getAll(authUserId()), authUserCaloriesPerDay());
     }
 
     public Meal get(int id) {
@@ -68,51 +60,5 @@ public class MealRestController {
     }
 
 
-    public boolean isTimeFilterNeed() {
-        return timeFilterNeed;
-    }
 
-    public void setTimeFilterNeed(boolean timeFilterNeed) {
-        this.timeFilterNeed = timeFilterNeed;
-    }
-
-    public boolean isDateFilterNeed() {
-        return dateFilterNeed;
-    }
-
-    public void setDateFilterNeed(boolean dateFilterNeed) {
-        this.dateFilterNeed = dateFilterNeed;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 }
