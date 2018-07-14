@@ -50,8 +50,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
-                "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories," +
-                        " user_id=:userID WHERE id=:id", map) == 0) {
+                "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories" +
+                        " WHERE id=:id AND user_id=:userId", map) == 0) {
             return null;
         }
         return meal;
@@ -60,7 +60,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=?", id) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE user_id=? AND id=?", userId, id) != 0;
     }
 
     @Override
