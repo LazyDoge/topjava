@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
+    @Transactional
+    @Query("SELECT m FROM Meal m LEFT JOIN FETCH m.user WHERE m.id=:id AND m.user.id=:userId")
+    Optional<Meal> findById(@Param("id") Integer id, @Param("userId") Integer userId);
+
     Optional<Meal> getByIdAndUserId(Integer id, Integer userId);
 
     List<Meal> findAllByUserId(Integer id, Sort sort);

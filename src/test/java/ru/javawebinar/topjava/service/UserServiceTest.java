@@ -20,7 +20,7 @@ public abstract class UserServiceTest extends ServiceTest {
 
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Before
     public void setUp() throws Exception {
