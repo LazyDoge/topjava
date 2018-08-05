@@ -8,12 +8,15 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.support.TransactionTemplate;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class JdbcMealRepositoryImpl implements MealRepository {
@@ -26,6 +29,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
+    private TransactionTemplate transactionTemplate;
+
     @Autowired
     public JdbcMealRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
@@ -34,6 +39,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        DataSourceTransactionManager manager = new DataSourceTransactionManager(jdbcTemplate.getDataSource());
+        transactionTemplate = new TransactionTemplate(manager);
     }
 
     @Override
@@ -46,14 +53,23 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(map);
-            meal.setId(newId.intValue());
+            transactionTemplate.execute(status -> {
+                Number newId = insertMeal.executeAndReturnKey(map);
+                meal.setId(newId.intValue());
+                return null;
+            });
         } else {
-            if (namedParameterJdbcTemplate.update("" +
-                            "UPDATE meals " +
-                            "   SET description=:description, calories=:calories, date_time=:date_time " +
-                            " WHERE id=:id AND user_id=:user_id"
-                    , map) == 0) {
+            AtomicInteger update = new AtomicInteger();
+            transactionTemplate.execute(status -> {
+                update.set(namedParameterJdbcTemplate.update("" +
+                                "UPDATE meals " +
+                                "   SET description=:description, calories=:calories, date_time=:date_time " +
+                                " WHERE id=:id AND user_id=:user_id"
+                        , map));
+                return null;
+            });
+
+            if (update.get() == 0) {
                 return null;
             }
         }
@@ -62,7 +78,12 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
+        AtomicInteger update = new AtomicInteger();
+        transactionTemplate.execute(status -> {
+            update.set(jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId));
+            return null;
+        });
+        return update.get() != 0;
     }
 
     @Override
