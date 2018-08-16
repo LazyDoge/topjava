@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.javawebinar.topjava.model.Meal;
@@ -23,7 +24,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController extends MealRestController {
+public class JspMealController extends AbstractMealController {
 
     @Autowired
     public JspMealController(MealService service) {
@@ -37,9 +38,9 @@ public class JspMealController extends MealRestController {
         return "meals";
     }
 
-    @GetMapping(params = "action=delete")
-    public String delete(HttpServletRequest request, Model model) {
-        int id = getId(request);
+    @GetMapping("/delete/{id}")
+    public String delete(HttpServletRequest request, Model model, @PathVariable Integer id) {
+//        int id = getId(request);
         super.delete(id);
         model.addAttribute("meals", super.getAll());
         return "meals";
@@ -53,7 +54,7 @@ public class JspMealController extends MealRestController {
 
     }
 
-    @GetMapping(params = "action=create")
+    @GetMapping("/create")
     public String create( Model model) {
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         model.addAttribute("meal", meal);
@@ -74,7 +75,7 @@ public class JspMealController extends MealRestController {
             super.update(meal, getId(request));
         }
 
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @PostMapping(params = "action=filter")
