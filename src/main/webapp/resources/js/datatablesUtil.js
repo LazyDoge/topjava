@@ -1,6 +1,7 @@
 function makeEditable() {
-    $(".delete").click(function () {
-        deleteRow($(this).attr("id"));
+    $(".deleteMeal").click(function () {
+        deleteRow($(this).parents("tr").attr("id"));
+        // console.log($(this).parents("tr").attr("id"));
     });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
@@ -9,6 +10,11 @@ function makeEditable() {
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
+}
+
+function deleteItem(id) {
+    deleteRow(id);
+    // console.log(id);
 }
 
 function add() {
