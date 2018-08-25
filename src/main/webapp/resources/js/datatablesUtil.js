@@ -1,3 +1,5 @@
+var filterData;
+
 function makeEditable() {
     $(".deleteMeal").click(function () {
         deleteRow($(this).parents("tr").attr("id"));
@@ -17,6 +19,22 @@ function deleteItem(id) {
     // console.log(id);
 }
 
+function filter() {
+    var form = $("#filterForm");
+    $.ajax({
+        type: "GET",
+        url: ajaxUrl+"filter",
+        data: form.serialize(),
+        success: function (data) {
+            filterData = data;
+            datatableApi.clear().rows.add(data).draw();
+            successNoty("Filtered by ajax")
+
+        }
+    })
+
+}
+
 function add() {
     $("#detailsForm").find(":input").val("");
     $("#editRow").modal();
@@ -33,9 +51,17 @@ function deleteRow(id) {
     });
 }
 
+function resetFilter() {
+    filterData = null;
+    updateTable();
+}
+
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.clear().rows.add(data).draw();
+        if (filterData == null) {
+            filterData = data;
+        }
+        datatableApi.clear().rows.add(filterData).draw();
     });
 }
 

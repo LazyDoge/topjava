@@ -14,24 +14,26 @@
         <section>
             <h3><spring:message code="meal.title"/></h3>
 
-            <form method="post" action="meals/filter">
+            <form id="filterForm">
                 <dl>
                     <dt><spring:message code="meal.startDate"/>:</dt>
-                    <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+                    <dd><input type="date" class="form-control" id="startDate" name="startDate" value="${param.startDate}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.endDate"/>:</dt>
-                    <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+                    <dd><input type="date" class="form-control" id="endDate" name="endDate" value="${param.endDate}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.startTime"/>:</dt>
-                    <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+                    <dd><input type="time" class="form-control" id="startTime" name="startTime" value="${param.startTime}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meal.endTime"/>:</dt>
-                    <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+                    <dd><input type="time" class="form-control" id="endTime" name="endTime" value="${param.endTime}"></dd>
                 </dl>
-                <button type="submit"><spring:message code="meal.filter"/></button>
+                <button  class="btn btn-secondary" type="reset" onclick="resetFilter()"><span class="fa fa-remove"/><spring:message code="common.cancel"/></button>
+                <button  type="button" class="btn btn-primary" onclick="filter()"><span class="fa fa-filter"/><spring:message code="meal.filter"/></button>
+                <%--</form>--%>
             </form>
             <hr>
             <%--<a href="meals/create"><spring:message code="meal.add"/></a>--%>
@@ -90,7 +92,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description" class="col-form-label"><spring:message code="meal.description"/></label>
+                        <label for="description" class="col-form-label"><spring:message
+                                code="meal.description"/></label>
                         <input type="text" class="form-control" id="description" name="description"
                                placeholder="<spring:message code="meal.description"/>">
                     </div>
