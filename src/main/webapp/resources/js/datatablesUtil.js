@@ -1,4 +1,5 @@
-var filterData;
+var filteredData;
+var filterForMealsNeeded = false;
 
 function makeEditable() {
     $(".deleteMeal").click(function () {
@@ -16,24 +17,8 @@ function makeEditable() {
 
 function deleteItem(id) {
     deleteRow(id);
-    // console.log(id);
 }
 
-function filter() {
-    var form = $("#filterForm");
-    $.ajax({
-        type: "GET",
-        url: ajaxUrl+"filter",
-        data: form.serialize(),
-        success: function (data) {
-            filterData = data;
-            datatableApi.clear().rows.add(data).draw();
-            successNoty("Filtered by ajax")
-
-        }
-    })
-
-}
 
 function add() {
     $("#detailsForm").find(":input").val("");
@@ -51,18 +36,15 @@ function deleteRow(id) {
     });
 }
 
-function resetFilter() {
-    filterData = null;
-    updateTable();
-}
 
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        if (filterData == null) {
-            filterData = data;
-        }
-        datatableApi.clear().rows.add(filterData).draw();
-    });
+    if (filterForMealsNeeded != null && filterForMealsNeeded) {
+        filter();
+    } else {
+        $.get(ajaxUrl, function (data) {
+            datatableApi.clear().rows.add(data).draw();
+        });
+    }
 }
 
 function save() {

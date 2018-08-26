@@ -40,3 +40,17 @@ $(function () {
     });
     makeEditable();
 });
+
+function activateUser(checkBox, id) {
+    var enabled = checkBox.is(":checked");
+    $.ajax({
+        url: ajaxUrl + id,
+        type: "POST",
+        data: "enabled=" + enabled,
+        success: function () {
+            updateTable();
+            successNoty(enabled ? "Enabled" : "Disabled");
+        }
+
+    });
+}

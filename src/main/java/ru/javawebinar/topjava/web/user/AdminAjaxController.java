@@ -34,4 +34,11 @@ public class AdminAjaxController extends AbstractUserController {
             super.create(user);
         }
     }
+
+    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public User enable(
+            @PathVariable int id,
+            @RequestParam("enabled") boolean enable) {
+        return super.enable(id, enable);
+    }
 }
