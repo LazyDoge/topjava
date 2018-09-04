@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.util;
 
 
+import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.HasId;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+
+import java.util.StringJoiner;
 
 public class ValidationUtil {
 
@@ -52,5 +55,18 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static void createErrorString(BindingResult result, StringJoiner joiner) {
+        result.getFieldErrors().forEach(
+                fieldError -> {
+                    String defaultMessage = fieldError.getDefaultMessage();
+                    assert defaultMessage != null;
+                    if (!defaultMessage.startsWith(fieldError.getField())) {
+                        defaultMessage = fieldError.getField() + ' ' + defaultMessage;
+                    }
+                    joiner.add(defaultMessage);
+                }
+        );
     }
 }
