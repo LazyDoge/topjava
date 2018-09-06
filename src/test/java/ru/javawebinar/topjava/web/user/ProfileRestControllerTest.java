@@ -31,7 +31,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testGetUnAuth() throws Exception {
+    void testGetUnAuth() throws Exception {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
@@ -52,7 +52,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertMatch(userService.getByEmail("newemail@ya.ru"), UserUtil.updateFromTo(new User(USER), updatedTo));
     }

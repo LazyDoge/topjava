@@ -35,7 +35,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testGetNotFound() throws Exception {
+    void testGetNotFound() throws Exception {
         mockMvc.perform(get(REST_URL + 1)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
@@ -61,7 +61,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testDeleteNotFound() throws Exception {
+    void testDeleteNotFound() throws Exception {
         mockMvc.perform(delete(REST_URL + 1)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
@@ -69,13 +69,13 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testGetUnAuth() throws Exception {
+    void testGetUnAuth() throws Exception {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void testGetForbidden() throws Exception {
+    void testGetForbidden() throws Exception {
         mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
@@ -90,7 +90,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         assertMatch(userService.get(USER_ID), updated);
     }

@@ -18,7 +18,7 @@ function clearFilter() {
 $.ajaxSetup({
     converters: {
         "text json": function (stringData) {
-            var json = JSON.parse(stringData);
+            const json = JSON.parse(stringData);
             $(json).each(function () {
                 this.dateTime = this.dateTime.replace('T', ' ').substr(0, 16);
             });
@@ -69,8 +69,8 @@ $(function () {
     });
 
 //  http://xdsoft.net/jqplugins/datetimepicker/
-    var startDate = $('#startDate');
-    var endDate = $('#endDate');
+    const startDate = $('#startDate');
+    const endDate = $('#endDate');
     startDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',

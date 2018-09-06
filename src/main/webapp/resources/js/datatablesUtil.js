@@ -1,7 +1,6 @@
-let form;
+const form = $('#detailsForm');
 
 function makeEditable() {
-    form = $('#detailsForm');
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
     });
@@ -9,9 +8,9 @@ function makeEditable() {
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function(e, xhr, options) {
+    const token = $("meta[name='_csrf']").attr("content");
+    const header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
 }
@@ -80,7 +79,7 @@ function successNoty(key) {
 function failNoty(jqXHR) {
     closeNoty();
     // https://stackoverflow.com/questions/48229776
-    var errorInfo = JSON.parse(jqXHR.responseText);
+    const errorInfo = JSON.parse(jqXHR.responseText);
     failedNote = new Noty({
         text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + "<br>" + errorInfo.type + "<br>" + errorInfo.detail,
         type: "error",
