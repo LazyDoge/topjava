@@ -17,6 +17,7 @@
         </c:if>
         <br/>
         <p>
+            <a class="btn btn-lg btn-success" href="register"><spring:message code="app.register"/> &raquo;</a>
             <button type="submit" class="btn btn-lg btn-primary" onclick="login('user@yandex.ru', 'password')">
                 <spring:message code="app.login"/> User
             </button>
@@ -62,6 +63,9 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 <script type="text/javascript">
+<c:if test="${not empty param.username}">
+    setCredentials("${param.username}", "");
+</c:if>
     function login(username, password) {
         setCredentials(username, password);
         $("#login_form").submit();
