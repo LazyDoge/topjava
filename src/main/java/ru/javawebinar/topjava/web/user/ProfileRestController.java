@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,11 @@ public class ProfileRestController extends AbstractUserController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo) {
-        super.update(userTo, SecurityUtil.authUserId());
+        try {
+            super.update(userTo, SecurityUtil.authUserId());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("User with this email already exists");
+        }
     }
 
     @GetMapping(value = "/text")
