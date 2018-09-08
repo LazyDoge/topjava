@@ -7,6 +7,8 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import javax.validation.Valid;
+
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @RestController
@@ -27,7 +29,7 @@ public class ProfileRestController extends AbstractUserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo) {
+    public void update(@Valid @RequestBody UserTo userTo) {
         super.update(userTo, SecurityUtil.authUserId());
     }
 

@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +62,14 @@ public class ExceptionInfoHandler {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
         return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(rootCause));
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorInfo handleMethodArgumentNotValidException( HttpServletRequest request, MethodArgumentNotValidException error ) {
+//        return logAndGetErrorInfo(request, error, false, VALIDATION_ERROR);
+        Throwable rootCause = ValidationUtil.getRootCause(error);
+        log.warn("{} at request  {}: {}", VALIDATION_ERROR, request.getRequestURL(), rootCause.toString());
+        return new ErrorInfo(request.getRequestURL(), VALIDATION_ERROR, ValidationUtil.getErrorsString(error.getBindingResult()));
     }
 }
