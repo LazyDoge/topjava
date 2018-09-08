@@ -20,7 +20,7 @@ import javax.validation.Valid;
 public class RootController extends AbstractUserController {
 
     @Autowired
-    UserDublicateValidator validator;
+    UserDuplicateValidator validator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -57,6 +57,7 @@ public class RootController extends AbstractUserController {
 
     @PostMapping("/profile")
     public String updateProfile(@Valid UserTo userTo, BindingResult result, SessionStatus status) {
+        validator.validate(userTo, result);
         if (result.hasErrors()) {
             return "profile";
         } else {

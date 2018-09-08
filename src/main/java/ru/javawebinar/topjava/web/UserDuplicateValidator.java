@@ -11,7 +11,7 @@ import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 @Component
-public class UserDublicateValidator implements Validator {
+public class UserDuplicateValidator implements Validator {
 
 
     @Autowired
@@ -33,7 +33,7 @@ public class UserDublicateValidator implements Validator {
         } catch (NotFoundException e) {
             return;
         }
-        if (byEmail != null) {
+        if (byEmail != null && SecurityUtil.authUserId() != byEmail.getId()) {
             errors.rejectValue("email", "user.duplicate");
         }
 
