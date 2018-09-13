@@ -64,8 +64,10 @@ public class ValidationUtil {
         result.getFieldErrors().forEach(
                 fe -> {
                     String msg = fe.getDefaultMessage();
-                    if (!msg.startsWith(fe.getField())) {
-                        msg = fe.getField() + ' ' + msg;
+                    if (msg != null) {
+                        if (!msg.startsWith(fe.getField())) {
+                            msg = fe.getField() + ' ' + msg;
+                        }
                     }
                     joiner.add(msg);
                 });

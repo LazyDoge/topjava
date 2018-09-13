@@ -22,7 +22,7 @@ class RootControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testUnAuth() throws Exception {
+    void testUnAuth() throws Exception {
         mockMvc.perform(get("/users"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
