@@ -24,6 +24,10 @@
                     <topjava:inputField labelCode="user.caloriesPerDay" name="caloriesPerDay" inputType="number"/>
 
                     <div class="text-right">
+                        <a class="btn btn-secondary" onclick="window.history.back()">
+                            <span class="fa fa-close"></span>
+                            <spring:message code="common.cancel"/>
+                        </a>
                         <button type="submit" class="btn btn-primary">
                             <span class="fa fa-check"></span>
                             <spring:message code="common.save"/>

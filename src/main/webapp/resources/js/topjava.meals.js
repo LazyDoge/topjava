@@ -74,7 +74,6 @@ $(function () {
     startDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',
-        formatDate: 'Y-m-d',
         onShow: function (ct) {
             this.setOptions({
                 maxDate: endDate.val() ? endDate.val() : false
@@ -84,7 +83,6 @@ $(function () {
     endDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',
-        formatDate: 'Y-m-d',
         onShow: function (ct) {
             this.setOptions({
                 minDate: startDate.val() ? startDate.val() : false
@@ -92,9 +90,25 @@ $(function () {
         }
     });
 
-    $('#startTime, #endTime').datetimepicker({
+    const startTime = $('#startTime');
+    const endTime = $('#endTime');
+    startTime.datetimepicker({
         datepicker: false,
-        format: 'H:i'
+        format: 'H:i',
+        onShow: function (ct) {
+            this.setOptions({
+                maxTime: endTime.val() ? endTime.val() : false
+            })
+        }
+    });
+    endTime.datetimepicker({
+        datepicker: false,
+        format: 'H:i',
+        onShow: function (ct) {
+            this.setOptions({
+                minTime: startTime.val() ? startTime.val() : false
+            })
+        }
     });
 
     $('#dateTime').datetimepicker({
